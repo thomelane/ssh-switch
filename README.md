@@ -1,5 +1,7 @@
 # ssh-switch
 
+Utility to switch Amazon EC2 instances on and off using SSH aliases.
+
 ## Install
 
 `pip install .`

@@ -3,17 +3,6 @@ import boto3
 import os
 
 
-def switch_instance(action, instance_id):
-    ec2 = boto3.resource('ec2')
-    instance = ec2.Instance(instance_id)
-    if action == "on":
-        instance.start()
-    elif action == "off":
-        instance.stop()
-    else:
-        raise ValueError("Action must be 'on' or 'off'.")
-    
-
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("action")
@@ -42,4 +31,19 @@ def find_instance_id(host):
 def main():
     args = parse_args()
     instance_id = find_instance_id(args.host)
-    switch_instance(args.action, instance_id)
+    ec2 = boto3.resource('ec2')
+    instance = ec2.Instance(instance_id)
+    if args.action == "on":
+        instance.start()
+    elif args.action == "off":
+        instance.stop()
+    elif args.action == "status":
+        pass
+    else:
+        raise ValueError("Action must be 'on', 'off' or 'status'.")
+    state = instance.state['Name']
+    print('Current state of {}: {}'.format(instance_id, state))
+
+
+if __name__ == "__main__":
+    main()
